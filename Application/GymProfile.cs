@@ -29,6 +29,7 @@ namespace Application
             CreateMap<Gym, GymDto>().ReverseMap();
             CreateMap<Gym, GymOwnerCreateGymCommand>().ReverseMap();
             
+            
             CreateMap<Plan, PlanDto>().ReverseMap();
         }
     }
