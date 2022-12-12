@@ -27,8 +27,9 @@ namespace Infrastructure.Adapters {
         {
             if (entity != null)
             {
-                _context.Set<E>().Remove(entity);
-                await this.CommitAsync().ConfigureAwait(false);
+                entity.SetDelete();
+                _context.Set<E>().Update(entity);  
+                await CommitAsync();
             }
         }
 
@@ -98,7 +99,7 @@ namespace Infrastructure.Adapters {
             if (entity != null)
             {
                 _context.Set<E>().Update(entity);                
-                await this.CommitAsync();
+                await CommitAsync();
             }
         }
 

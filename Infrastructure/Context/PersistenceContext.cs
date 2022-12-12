@@ -22,7 +22,6 @@ namespace Infrastructure.Context
         public DbSet<User> Users { get; set; }
         public DbSet<Routine> Routines { get; set; }
         public DbSet<Plan> Plans { get; set; }
-        public DbSet<CustomerPlan> CustomerPlans { get; set; }
         public DbSet<Attendance> Attendances { get; set; }
         
 
@@ -38,7 +37,6 @@ namespace Infrastructure.Context
                 return;
             }
             
-            modelBuilder.AppendGlobalQueryFilter<ISoftDelete>(s => s.DeletedOn == null);
             modelBuilder.HasDefaultSchema(_config.GetValue<string>("SchemaName"));
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
@@ -48,6 +46,7 @@ namespace Infrastructure.Context
                 modelBuilder.Entity(entityType.Name).Property<DateTime>("CreatedOn").HasDefaultValueSql("GETDATE()");
                 modelBuilder.Entity(entityType.Name).Property<DateTime>("LastModifiedOn").HasDefaultValueSql("GETDATE()");
             }
+            modelBuilder.AppendGlobalQueryFilter<ISoftDelete>(s => s.DeletedOn == null);
             base.OnModelCreating(modelBuilder);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }

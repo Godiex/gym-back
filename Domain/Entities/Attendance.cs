@@ -6,7 +6,7 @@ namespace Domain.Entities
 {
     public class Attendance : EntityBase<Guid>
     {
-        public CustomerPlan CustomerPlan { get; set; }
+        public Customer Customer { get; set; }
         public DateTime EntryDate { get; set; }
     }
 }

@@ -2,7 +2,7 @@ using AutoMapper;
 using Domain.Services;
 using MediatR;
 
-namespace Application.GymOwners.Queries
+namespace Application.UseCases.GymOwners.Queries
 {
     public class GymOwnerQueryHandler : IRequestHandler<GymOwnerQuery, GymOwnerDto>
     {

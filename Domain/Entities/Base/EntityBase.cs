@@ -1,8 +1,7 @@
 namespace Domain.Entities.Base
 {
-    public class EntityBase<T> : DomainEntity, IEntityBase<T>, ISoftDelete
+    public class EntityBase<T> : DomainEntity, IEntityBase<T>
     {
-        public DateTime? DeletedOn { get; set; }
         public virtual T Id { get; set; } = default!;
     }
 }

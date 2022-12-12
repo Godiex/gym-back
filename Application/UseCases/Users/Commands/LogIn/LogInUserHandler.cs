@@ -1,10 +1,8 @@
-using AutoMapper;
-using Domain.Entities;
 using Domain.Enums;
 using Domain.Services;
 using MediatR;
 
-namespace Application.Users.Commands.LogIn {
+namespace Application.UseCases.Users.Commands.LogIn {
 
     public class LogInUserHandler : IRequestHandler<LogInUserCommand, LogInUserDto>
     {

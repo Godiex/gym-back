@@ -1,10 +1,9 @@
 using AutoMapper;
 using Domain.Entities;
-using Domain.Exceptions;
 using Domain.Services;
 using MediatR;
 
-namespace Application.GymOwners.Commands.Create {
+namespace Application.UseCases.GymOwners.Commands.Create {
 
     public class GymOwnerHandler : AsyncRequestHandler<GymOwnerCreateCommand>
     {

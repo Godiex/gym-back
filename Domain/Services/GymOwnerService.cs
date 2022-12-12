@@ -21,7 +21,7 @@ namespace Domain.Services
 
         public async Task<GymOwner> Get(Guid userId)
         {
-            return (await _gymOwnerRepository.GetAsync(x => x.UserId == userId, includeObjectProperties: owner => owner.Gym.Customers)).ToList().First();
+            return (await _gymOwnerRepository.GetAsync(x => x.UserId == userId, includeObjectProperties: owner => owner.Gym.Customers)).First();
         }
 
     }

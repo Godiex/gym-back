@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
-using Domain.Enums;
 using MediatR;
 
-namespace Application.Users.Commands.LogIn
+namespace Application.UseCases.Users.Commands.LogIn
 {
     public record LogInUserCommand(
         [Required] string UserName,

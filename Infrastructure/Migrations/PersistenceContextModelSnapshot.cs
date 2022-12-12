@@ -31,7 +31,7 @@ namespace Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("GETDATE()");
 
-                    b.Property<Guid?>("CustomerPlanId")
+                    b.Property<Guid?>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("DeletedOn")
@@ -47,7 +47,7 @@ namespace Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CustomerPlanId");
+                    b.HasIndex("CustomerId");
 
                     b.ToTable("Attendance", "Gym");
                 });
@@ -57,9 +57,6 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("BirthDay")
-                        .HasColumnType("datetime2");
 
                     b.Property<string>("CellPhone")
                         .IsRequired()
@@ -81,6 +78,11 @@ namespace Infrastructure.Migrations
                     b.Property<Guid>("GymId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Identification")
+                        .IsRequired()
+                        .HasMaxLength(11)
+                        .HasColumnType("nvarchar(11)");
+
                     b.Property<DateTime>("LastModifiedOn")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
@@ -90,6 +92,12 @@ namespace Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("PlanId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("State")
+                        .HasColumnType("int");
 
                     b.Property<string>("Surnames")
                         .IsRequired()
@@ -109,47 +117,11 @@ namespace Infrastructure.Migrations
 
                     b.HasIndex("GymId");
 
+                    b.HasIndex("PlanId");
+
                     b.HasIndex("UserId");
 
                     b.ToTable("Customer", "Gym");
-                });
-
-            modelBuilder.Entity("Domain.Entities.CustomerPlan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<Guid>("CustomerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DeletedOn")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedOn")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<Guid?>("PlanId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CustomerId");
-
-                    b.HasIndex("PlanId");
-
-                    b.ToTable("CustomerPlan", "Gym");
                 });
 
             modelBuilder.Entity("Domain.Entities.Gym", b =>
@@ -211,6 +183,10 @@ namespace Infrastructure.Migrations
 
                     b.Property<Guid?>("GymId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Identification")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("LastModifiedOn")
                         .ValueGeneratedOnAdd()
@@ -350,11 +326,11 @@ namespace Infrastructure.Migrations
 
             modelBuilder.Entity("Domain.Entities.Attendance", b =>
                 {
-                    b.HasOne("Domain.Entities.CustomerPlan", "CustomerPlan")
+                    b.HasOne("Domain.Entities.Customer", "Customer")
                         .WithMany()
-                        .HasForeignKey("CustomerPlanId");
+                        .HasForeignKey("CustomerId");
 
-                    b.Navigation("CustomerPlan");
+                    b.Navigation("Customer");
                 });
 
             modelBuilder.Entity("Domain.Entities.Customer", b =>
@@ -362,6 +338,12 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Gym", "Gym")
                         .WithMany("Customers")
                         .HasForeignKey("GymId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.Plan", "Plan")
+                        .WithMany()
+                        .HasForeignKey("PlanId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -373,24 +355,9 @@ namespace Infrastructure.Migrations
 
                     b.Navigation("Gym");
 
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Entities.CustomerPlan", b =>
-                {
-                    b.HasOne("Domain.Entities.Customer", "Customer")
-                        .WithMany("CustomerPlans")
-                        .HasForeignKey("CustomerId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Entities.Plan", "Plan")
-                        .WithMany()
-                        .HasForeignKey("PlanId");
-
-                    b.Navigation("Customer");
-
                     b.Navigation("Plan");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Domain.Entities.GymOwner", b =>
@@ -415,11 +382,6 @@ namespace Infrastructure.Migrations
                     b.HasOne("Domain.Entities.Plan", null)
                         .WithMany("Routines")
                         .HasForeignKey("PlanId");
-                });
-
-            modelBuilder.Entity("Domain.Entities.Customer", b =>
-                {
-                    b.Navigation("CustomerPlans");
                 });
 
             modelBuilder.Entity("Domain.Entities.Gym", b =>

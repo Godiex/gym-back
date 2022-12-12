@@ -93,14 +93,16 @@ namespace Infrastructure.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    BirthDay = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Weight = table.Column<float>(type: "real", nullable: false),
                     Tall = table.Column<float>(type: "real", nullable: false),
                     GymId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    PlanId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    State = table.Column<int>(type: "int", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Identification = table.Column<string>(type: "nvarchar(11)", maxLength: 11, nullable: false),
                     Names = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Surnames = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
@@ -116,6 +118,13 @@ namespace Infrastructure.Migrations
                         principalTable: "Gym",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Customer_Plan_PlanId",
+                        column: x => x.PlanId,
+                        principalSchema: "Gym",
+                        principalTable: "Plan",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_Customer_User_UserId",
                         column: x => x.UserId,
@@ -136,6 +145,7 @@ namespace Infrastructure.Migrations
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Identification = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Names = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Surnames = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
@@ -161,44 +171,12 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "CustomerPlan",
-                schema: "Gym",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    PlanId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
-                    State = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
-                    DeletedOn = table.Column<DateTime>(type: "datetime2", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CustomerPlan", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CustomerPlan_Customer_CustomerId",
-                        column: x => x.CustomerId,
-                        principalSchema: "Gym",
-                        principalTable: "Customer",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_CustomerPlan_Plan_PlanId",
-                        column: x => x.PlanId,
-                        principalSchema: "Gym",
-                        principalTable: "Plan",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Attendance",
                 schema: "Gym",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CustomerPlanId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
                     LastModifiedOn = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()"),
@@ -208,19 +186,19 @@ namespace Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Attendance", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Attendance_CustomerPlan_CustomerPlanId",
-                        column: x => x.CustomerPlanId,
+                        name: "FK_Attendance_Customer_CustomerId",
+                        column: x => x.CustomerId,
                         principalSchema: "Gym",
-                        principalTable: "CustomerPlan",
+                        principalTable: "Customer",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Attendance_CustomerPlanId",
+                name: "IX_Attendance_CustomerId",
                 schema: "Gym",
                 table: "Attendance",
-                column: "CustomerPlanId");
+                column: "CustomerId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Customer_GymId",
@@ -229,22 +207,16 @@ namespace Infrastructure.Migrations
                 column: "GymId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Customer_PlanId",
+                schema: "Gym",
+                table: "Customer",
+                column: "PlanId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Customer_UserId",
                 schema: "Gym",
                 table: "Customer",
                 column: "UserId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerPlan_CustomerId",
-                schema: "Gym",
-                table: "CustomerPlan",
-                column: "CustomerId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_CustomerPlan_PlanId",
-                schema: "Gym",
-                table: "CustomerPlan",
-                column: "PlanId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_GymOwner_GymId",
@@ -280,19 +252,15 @@ namespace Infrastructure.Migrations
                 schema: "Gym");
 
             migrationBuilder.DropTable(
-                name: "CustomerPlan",
-                schema: "Gym");
-
-            migrationBuilder.DropTable(
                 name: "Customer",
                 schema: "Gym");
 
             migrationBuilder.DropTable(
-                name: "Plan",
+                name: "Gym",
                 schema: "Gym");
 
             migrationBuilder.DropTable(
-                name: "Gym",
+                name: "Plan",
                 schema: "Gym");
 
             migrationBuilder.DropTable(

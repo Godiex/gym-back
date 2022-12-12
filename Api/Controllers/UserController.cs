@@ -1,6 +1,4 @@
-using Application.GymOwners.Commands.Create;
-using Application.GymOwners.Queries;
-using Application.Users.Commands.LogIn;
+using Application.UseCases.Users.Commands.LogIn;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

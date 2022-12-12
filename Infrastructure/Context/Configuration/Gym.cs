@@ -57,6 +57,11 @@ public class CustomerConfig : IEntityTypeConfiguration<Customer>
             .Property(x => x.Email)
             .IsRequired()
             .HasMaxLength(30);
+        
+        builder
+            .Property(x => x.Identification)
+            .IsRequired()
+            .HasMaxLength(11);
 
         builder
             .Property(x => x.Names)
@@ -73,6 +78,9 @@ public class CustomerConfig : IEntityTypeConfiguration<Customer>
         
         builder
             .HasOne(x => x.Gym);
+        
+        builder
+            .HasOne(x => x.Plan);
     }
 }
 
@@ -97,7 +105,7 @@ public class GymOwnerConfig : IEntityTypeConfiguration<GymOwner>
             .Property(x => x.Surnames)
             .IsRequired()
             .HasMaxLength(100);
-        
+
         builder
             .HasOne(x => x.User);
         
@@ -141,26 +149,6 @@ public class RoutineConfig : IEntityTypeConfiguration<Routine>
     }
 }
 
-public class CustomerPlanConfig : IEntityTypeConfiguration<CustomerPlan>
-{
-
-    public void Configure(EntityTypeBuilder<CustomerPlan> builder)
-    {
-        builder
-            .ToTable("CustomerPlan", SchemaNames.Gym);
-        
-        builder
-            .HasOne(x => x.Customer);
-        
-        builder
-            .HasOne(x => x.Plan);
-        
-        builder.
-            Property(c => c.State)
-            .HasConversion<string>();
-    }
-}
-
 public class AttendancePlanConfig : IEntityTypeConfiguration<Attendance>
 {
 
@@ -170,7 +158,7 @@ public class AttendancePlanConfig : IEntityTypeConfiguration<Attendance>
             .ToTable("Attendance", SchemaNames.Gym);
         
         builder
-            .HasOne(x => x.CustomerPlan);
+            .HasOne(x => x.Customer);
     }
 }
 

@@ -1,5 +1,5 @@
-using Application.GymOwners.Commands.Create;
-using Application.GymOwners.Queries;
+using Application.UseCases.GymOwners.Commands.Create;
+using Application.UseCases.GymOwners.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
