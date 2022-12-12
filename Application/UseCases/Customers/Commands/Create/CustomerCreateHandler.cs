@@ -10,14 +10,12 @@ namespace Application.UseCases.Customers.Commands.Create {
     {
         private readonly CustomerService _customerService;
         private readonly PlanService _planService;
-        private readonly GymService _gymService;
         private readonly IMapper _mapper;
 
         public CustomerCreateHandler(CustomerService customerService, PlanService planService, GymService gymService, IMapper mapper)
         {
             _mapper = mapper;
             _planService  = planService ?? throw new ArgumentNullException(nameof(planService));
-            _gymService  = gymService ?? throw new ArgumentNullException(nameof(gymService));
             _customerService = customerService ?? throw new ArgumentNullException(nameof(customerService));
         }
 
