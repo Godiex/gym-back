@@ -44,7 +44,7 @@ namespace Domain.Services
         
         public async Task<List<Customer>> Get(Guid gymId)
         {
-            var customersByGym = await _repository.GetAsync(x => x.GymId == gymId, includeObjectProperties: c => c.Plan);
+            var customersByGym = await _repository.GetAsync(x => x.GymId == gymId, includeStringProperties:"User,Plan");
             return customersByGym.ToList();
         }
         

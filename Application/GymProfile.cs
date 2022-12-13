@@ -17,6 +17,7 @@ namespace Application
             CreateMap<User, UserGymOwnerCreateCommand>().ReverseMap();
             CreateMap<User, UserCreateCustomerCommand>().ReverseMap();
             CreateMap<User, UserUpdateCustomerCommand>().ReverseMap();
+            CreateMap<User, CustomerUserDto>().ReverseMap();
             
             CreateMap<GymOwner, GymOwnerCreateCommand>().ReverseMap();
             CreateMap<GymOwner, GymOwnerDto>().ReverseMap();
