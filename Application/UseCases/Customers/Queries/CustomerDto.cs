@@ -1,6 +1,8 @@
 namespace Application.UseCases.Customers.Queries {
     public record CustomerDto {
         public Guid Id { get; set; } 
+        public float Weight { get; set; }
+        public float Tall { get; set; }
         public string Names { get; set; } = default!;
         public string Surnames { get; set; } = default!;
         public string Email { get; set; } = default!;

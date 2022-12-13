@@ -48,6 +48,17 @@ namespace Domain.Services
             return customersByGym.ToList();
         }
         
+        public async Task<Customer> GetByUserId(Guid userId)
+        {
+            var customerSearched = (await _repository.GetAsync(x => x.User.Id == userId, includeStringProperties:"User,Gym")).FirstOrDefault();
+            if (customerSearched == null)
+            {
+                throw new AppException($"no existe un cliente con este id {userId}");
+            }
+
+            return customerSearched;
+        }
+        
         public async Task<Customer> GetById(Guid id)
         {
             var customerSearched = (await _repository.GetAsync(x => x.Id == id)).FirstOrDefault();

@@ -10,6 +10,7 @@ namespace Application.UseCases.Users.Commands.LogIn
 
     public record LogInUserDto(
         Guid UserId,
+        Guid GymId,
         string TypeUser
     );
 } 

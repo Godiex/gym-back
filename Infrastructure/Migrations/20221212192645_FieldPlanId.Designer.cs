@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(PersistenceContext))]
-    [Migration("20221212101023_Initial")]
-    partial class Initial
+    [Migration("20221212192645_FieldPlanId")]
+    partial class FieldPlanId
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,7 +95,7 @@ namespace Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<Guid?>("PlanId")
+                    b.Property<Guid>("PlanId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("State")
@@ -345,7 +345,9 @@ namespace Infrastructure.Migrations
 
                     b.HasOne("Domain.Entities.Plan", "Plan")
                         .WithMany()
-                        .HasForeignKey("PlanId");
+                        .HasForeignKey("PlanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Domain.Entities.User", "User")
                         .WithMany()
