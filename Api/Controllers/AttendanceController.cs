@@ -1,5 +1,6 @@
 using Application.UseCases.Attendance.Commands.Create;
 using Application.UseCases.Attendance.Queries;
+using Application.UseCases.Attendance.Queries.GetAttendanceByGym;
 using Domain.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
@@ -17,6 +18,9 @@ public class AttendanceController
 
     [HttpGet("{userId:guid}/today")]
     public async Task<AttendanceTodayDto> Get(Guid userId) => await _mediator.Send(new AttendanceTodayQuery(userId));
+    
+    [HttpGet("{gymId:guid}/gym")]
+    public async Task<List<AttendanceByGymDto>> GetByGym(Guid gymId) => await _mediator.Send(new AttendanceByGymQuery(gymId));
 
     [HttpPost]
     public async Task Post(AttendanceCreateCommand command) => await _mediator.Send(command);

@@ -35,5 +35,14 @@ namespace Domain.Services
             
             return attendance != null;
         }
+        
+        public async Task<List<Attendance>> GetAttendanceByGym(Guid gymId)
+        {
+            var currentDate = DateTime.Now;
+            var attendances = (await _repository.GetAsync(x => 
+                x.Customer.GymId == gymId && x.EntryDate.Year == currentDate.Year &&
+                x.EntryDate.Month == currentDate.Month && x.EntryDate.DayOfYear == currentDate.DayOfYear, includeStringProperties: "Customer")).ToList();
+            return attendances;
+        }
     }
 }

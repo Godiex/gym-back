@@ -1,3 +1,4 @@
+using Application.UseCases.Attendance.Queries.GetAttendanceByGym;
 using Application.UseCases.Customers.Commands.Create;
 using Application.UseCases.Customers.Commands.Delete;
 using Application.UseCases.Customers.Commands.Update;
@@ -26,12 +27,14 @@ namespace Application
             CreateMap<Customer, CustomerUpdateCommand>().ReverseMap();
             CreateMap<Customer, CustomerDeleteCommand>().ReverseMap();
             CreateMap<Customer, CustomerDto>().ReverseMap();
+            CreateMap<Customer, CustomerAttendanceDto>().ReverseMap();
             
             CreateMap<Gym, GymDto>().ReverseMap();
             CreateMap<Gym, GymOwnerCreateGymCommand>().ReverseMap();
             
-            
             CreateMap<Plan, PlanDto>().ReverseMap();
+            
+            CreateMap<Attendance, AttendanceByGymDto>().ReverseMap();
         }
     }
 }
